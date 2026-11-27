@@ -39,7 +39,24 @@ function renderList() {
   const push = (next) => {
     const target = hashForState({ ...state, ...next });
     if (target !== location.hash) history.replaceState(null, "", target);
+    // Re-rendering replaces the search input, which would drop keyboard focus
+    // mid-typing; remember it and hand it back to the fresh input afterwards.
+    const searchHadFocus =
+      document.activeElement === search;
+    const caret = searchHadFocus ? search.selectionStart : null;
     render();
+    if (searchHadFocus) {
+      const fresh = app.querySelector("#search");
+      if (fresh) {
+        fresh.focus();
+        const pos = caret ?? fresh.value.length;
+        try {
+          fresh.setSelectionRange(pos, pos);
+        } catch {
+          // Some browsers reject a caret on a search input; focus alone is enough.
+        }
+      }
+    }
   };
   let timer = null;
   search.addEventListener("input", () => {

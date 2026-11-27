@@ -48,7 +48,7 @@ export function listPage({ state, shown, total, categories, stores }) {
   const chips = ["All", ...categories]
     .map(
       (c) =>
-        `<button type="button" class="chip${state.cat === c ? " active" : ""}" data-cat="${escape(c)}">${escape(c)}</button>`,
+        `<button type="button" class="chip${state.cat === c ? " active" : ""}" data-cat="${escape(c)}" aria-pressed="${state.cat === c}">${escape(c)}</button>`,
     )
     .join("");
   const storeOptions = ["All", ...stores]
@@ -105,7 +105,7 @@ export function listPage({ state, shown, total, categories, stores }) {
       </label>
     </div>
     <div class="chips" role="group" aria-label="Category">${chips}</div>
-    <p class="count"><strong>${shown.length}</strong> of ${total} verified deals · sorted by ${escape(state.sort === "discount" ? "biggest discount" : state.sort === "saving" ? "biggest saving" : state.sort === "price" ? "lowest price" : "newest checked")}</p>
+    <p class="count" aria-live="polite"><strong>${shown.length}</strong> of ${total} verified deals · sorted by ${escape(state.sort === "discount" ? "biggest discount" : state.sort === "saving" ? "biggest saving" : state.sort === "price" ? "lowest price" : "newest checked")}</p>
   </section>
   ${topPick}
   <section class="grid" aria-label="Deals">${cards}</section>
